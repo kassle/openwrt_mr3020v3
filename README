@@ -1,0 +1,3 @@
+## Preparation
+### Install required tools
+sudo apt install --no-install-recommends build-essential xz-utils wget python3-distutils
