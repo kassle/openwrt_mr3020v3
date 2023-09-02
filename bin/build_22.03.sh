@@ -1,0 +1,1 @@
+make image PROFILE="tplink_tl-mr3020-v3" PACKAGES="usb-modeswitch kmod-usb-net-cdc-ether kmod-usb-storage kmod-fs-ext4 blockd openvpn-wolfssl ethtool uhttpd uhttpd-mod-ubus libiwinfo-lua luci-base luci-app-firewall luci-mod-admin-full luci-theme-bootstrap luci-app-openvpn luci-app-ksmbd luci-app-https-dns-proxy -ppp -ppp-mod-pppoe -opkg" FILES="files"

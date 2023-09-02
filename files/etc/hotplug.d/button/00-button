@@ -1,0 +1,41 @@
+#!/bin/sh
+
+SW1=`cat /sys/kernel/debug/gpio | grep sw1 | awk '{ print $6 }'`
+SW2=`cat /sys/kernel/debug/gpio | grep sw2 | awk '{ print $6 }'`
+
+# logger "Button: $BUTTON -> Action: $ACTION -> SW1: $SW1 -> SW2: $SW2"
+
+if [ "$SW1" == "hi" ] && [ "$SW2" == "hi" ] && [ "$BUTTON" == "BTN_1" ] && [ "$ACTION" == "released" ]; then
+    logger "Switch to mode AP"
+
+    uci delete network.@device[0].ports
+    uci set network.wwan.device="eth0"
+
+    /etc/init.d/network reload
+elif [ "$SW1" == "lo" ] && [ "$BUTTON" == "BTN_0" ] && [ "$ACTION" == "pressed" ]; then
+    logger "Switch to mode 4G"
+
+    uci delete network.@device[0].ports
+    uci set network.@device[0].ports="eth0"
+
+    uci set network.wwan.device="eth1"
+
+    /etc/init.d/network reload
+elif [ "$SW2" == "lo" ] && [ "$BUTTON" == "BTN_1" ] && [ "$ACTION" == "pressed" ]; then
+    logger "Switch to mode WISP"
+
+    uci delete network.@device[0].ports
+    uci set network.@device[0].ports="eth0"
+
+    uci delete network.wwan.device
+
+    /etc/init.d/network reload
+elif [ "$BUTTON" == "wps" ] && [ "$ACTION" == "released" ]; then
+    logger "Reset wifi ap"
+    AP_LIST=`uci show wireless | grep wifinet | grep ".mode='sta'" | awk -F.mode '{ print $1 }'`
+    for AP in $AP_LIST; do
+        logger "  - remove ap: $AP"
+        uci delete $AP
+    done
+    /etc/init.d/network reload
+fi
