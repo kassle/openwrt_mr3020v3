@@ -2,6 +2,7 @@
 
 SW1=`cat /sys/kernel/debug/gpio | grep sw1 | awk '{ print $6 }'`
 SW2=`cat /sys/kernel/debug/gpio | grep sw2 | awk '{ print $6 }'`
+TMPFILE="/tmp/button_press_period"
 
 # logger "Button: $BUTTON -> Action: $ACTION -> SW1: $SW1 -> SW2: $SW2"
 
@@ -30,12 +31,33 @@ elif [ "$SW2" == "lo" ] && [ "$BUTTON" == "BTN_1" ] && [ "$ACTION" == "pressed" 
     uci delete network.wwan.device
 
     /etc/init.d/network reload
+elif [ "$BUTTON" == "wps" ] && [ "$ACTION" == "pressed" ]; then
+    date +%s > $TMPFILE
 elif [ "$BUTTON" == "wps" ] && [ "$ACTION" == "released" ]; then
-    logger "Reset wifi ap"
-    AP_LIST=`uci show wireless | grep wifinet | grep ".mode='sta'" | awk -F.mode '{ print $1 }'`
-    for AP in $AP_LIST; do
-        logger "  - remove ap: $AP"
-        uci delete $AP
-    done
-    /etc/init.d/network reload
+    PRESSTIME=`cat $TMPFILE`
+    CURRTIME=`date +%s`
+    PERIOD=`expr $CURRTIME - $PRESSTIME`
+    rm $TMPFILE
+
+    if [ "$PERIOD" -ge 5 ]; then
+        logger "WPS Button Activated"
+        AP_LIST=`uci show wireless | grep wifinet | grep ".mode='sta'" | awk -F.mode '{ print $1 }'`
+        for AP in $AP_LIST; do
+            logger "  - remove ap: $AP"
+            uci delete $AP
+        done
+        /etc/init.d/network reload
+    else
+        logger "Reset Button Activated"
+        CONFIG=`uci get openvpn.default_client.enabled 2>/dev/null`;
+        if [ "$?" == 0 ]; then
+            if [ "$CONFIG" == 0 ]; then
+                uci set openvpn.default_client.enabled=1
+            else
+                 uci set openvpn.default_client.enabled=0
+            fi
+            uci commit openvpn
+            service openvpn restart
+        fi
+    fi
 fi
