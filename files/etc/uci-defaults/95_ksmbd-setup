@@ -1,0 +1,17 @@
+CHECK=`uci show ksmbd | grep "@share" | grep "name='shared'" | wc -l`
+
+if [ "$CHECK" -gt 0 ]; then
+    exit 0
+fi
+
+uci -q batch << EOI
+set ksmbd.@globals[0].interface='lan'
+set ksmbd.@globals[0].description='Shared Storage'
+add ksmbd share
+set ksmbd.@share[-1].name='shared'
+set ksmbd.@share[-1].path='/mnt'
+set ksmbd.@share[-1].read_only='no'
+set ksmbd.@share[-1].guest_ok='yes'
+set ksmbd.@share[-1].create_mask='0666'
+set ksmbd.@share[0].dir_mask='0777'
+EOI

@@ -1,3 +1,9 @@
+CHECK=`uci show system | grep "@led" | grep "name='vpn'" | wc -l`
+
+if [ "$CHECK" -gt 0 ]; then
+    exit 0
+fi
+
 uci -q batch << EOI
 add system led
 set system.@led[-1].name='vpn'

@@ -1,3 +1,4 @@
 uci -q batch << EOI
 set system.ntp.enable_server='1'
+set system.ntp.interface='lan'
 EOI

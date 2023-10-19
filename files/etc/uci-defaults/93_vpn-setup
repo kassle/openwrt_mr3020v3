@@ -1,0 +1,12 @@
+CHECK=`uci get network.vpn 2>/dev/null`
+
+if [ "$?" -eq 0 ]; then
+    exit 0
+fi
+
+uci -q batch << EOI
+set network.vpn='interface'
+set network.vpn.proto='none'
+set network.vpn.device='tun0'
+add_list firewall.@zone[1].network='vpn'
+EOI
