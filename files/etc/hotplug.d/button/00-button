@@ -6,59 +6,64 @@ TMPFILE="/tmp/button_press_period"
 
 # logger "Button: $BUTTON -> Action: $ACTION -> SW1: $SW1 -> SW2: $SW2"
 
-if [ "$SW1" == "hi" ] && [ "$SW2" == "hi" ] && [ "$BUTTON" == "BTN_1" ] && [ "$ACTION" == "released" ]; then
-    logger "Switch to mode AP"
+if [ "$BUTTON" == "wps" ]; then
+    if [ "$ACTION" == "released" ]; then
+        PRESSTIME=`cat $TMPFILE`
+        CURRTIME=`date +%s`
+        PERIOD=`expr $CURRTIME - $PRESSTIME`
+        rm $TMPFILE
 
-    uci delete network.@device[0].ports
-    uci set network.wan.device="eth0.1"
-
-    /etc/init.d/network reload
-elif [ "$SW1" == "lo" ] && [ "$BUTTON" == "BTN_0" ] && [ "$ACTION" == "pressed" ]; then
-    logger "Switch to mode 4G"
-
-    uci delete network.@device[0].ports
-    uci set network.@device[0].ports="eth0.1"
-
-    uci set network.wan.device="eth1"
-
-    /etc/init.d/network reload
-elif [ "$SW2" == "lo" ] && [ "$BUTTON" == "BTN_1" ] && [ "$ACTION" == "pressed" ]; then
-    logger "Switch to mode WISP"
-
-    uci delete network.@device[0].ports
-    uci set network.@device[0].ports="eth0.1"
-
-    uci delete network.wan.device
-
-    /etc/init.d/network reload
-elif [ "$BUTTON" == "wps" ] && [ "$ACTION" == "pressed" ]; then
-    date +%s > $TMPFILE
-elif [ "$BUTTON" == "wps" ] && [ "$ACTION" == "released" ]; then
-    PRESSTIME=`cat $TMPFILE`
-    CURRTIME=`date +%s`
-    PERIOD=`expr $CURRTIME - $PRESSTIME`
-    rm $TMPFILE
-
-    if [ "$PERIOD" -ge 5 ]; then
-        logger "Reset Button Activated"
-        AP_LIST=`uci show wireless | grep wifinet | grep ".mode='sta'" | awk -F.mode '{ print $1 }'`
-        for AP in $AP_LIST; do
-            logger "  - remove ap: $AP"
-            uci delete $AP
-        done
-        /etc/init.d/network reload
-    else
-        logger "WPS Button Activated"
-        CONFIG=`uci get openvpn.default_client 2>/dev/null`;
-        if [ "$?" == 0 ]; then
-            ENABLED=`uci get openvpn.default_client.enabled 2>/dev/null`;
-            if [ "$ENABLED" == 1 ]; then
-                uci set openvpn.default_client.enabled=0
-            else
-                uci set openvpn.default_client.enabled=1
+        if [ "$PERIOD" -ge 5 ]; then
+            logger "Reset Button Activated"
+            AP_LIST=`uci show wireless | grep wifinet | grep ".mode='sta'" | awk -F.mode '{ print $1 }'`
+            for AP in $AP_LIST; do
+                logger "  - remove ap: $AP"
+                uci delete $AP
+            done
+            /etc/init.d/network reload
+        else
+            logger "WPS Button Activated"
+            CONFIG=`uci get openvpn.default_client 2>/dev/null`;
+            if [ "$?" == 0 ]; then
+                ENABLED=`uci get openvpn.default_client.enabled 2>/dev/null`;
+                if [ "$ENABLED" == 1 ]; then
+                    uci set openvpn.default_client.enabled=0
+                else
+                    uci set openvpn.default_client.enabled=1
+                fi
+                uci commit openvpn
+                service openvpn restart
             fi
-            uci commit openvpn
-            service openvpn restart
         fi
+    else
+        date +%s > $TMPFILE
+    fi
+else
+    if [ "$SW2" == "hi" ]; then
+        if [ "$SW1" == "hi" ]; then
+            logger "Switch to mode AP"
+
+            uci delete network.@device[0].ports
+            uci set network.wan.device="eth0.1"
+
+            /etc/init.d/network reload
+        else
+            logger "Switch to mode 4G"
+
+            uci delete network.@device[0].ports
+            uci set network.@device[0].ports="eth0.1"
+            uci set network.wan.device="eth1"
+
+            /etc/init.d/network reload
+
+        fi
+    else
+        logger "Switch to mode WISP"
+
+        uci delete network.@device[0].ports
+        uci set network.@device[0].ports="eth0.1"
+        uci delete network.wan.device
+
+        /etc/init.d/network reload
     fi
 fi
