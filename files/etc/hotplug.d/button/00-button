@@ -23,16 +23,17 @@ if [ "$BUTTON" == "wps" ]; then
             /etc/init.d/network reload
         else
             logger "WPS Button Activated"
-            CONFIG=`uci get openvpn.default_client 2>/dev/null`;
+
             if [ "$?" == 0 ]; then
-                ENABLED=`uci get openvpn.default_client.enabled 2>/dev/null`;
-                if [ "$ENABLED" == 1 ]; then
-                    uci set openvpn.default_client.enabled=0
+                ENABLED=`wg show | grep interface`;
+                if [ "$ENABLED" == "" ]; then
+                    ifup vpn
                 else
-                    uci set openvpn.default_client.enabled=1
+                    ifdown vpn
+
+                    ifdown wwan
+                    ifup wwan
                 fi
-                uci commit openvpn
-                service openvpn restart
             fi
         fi
     else

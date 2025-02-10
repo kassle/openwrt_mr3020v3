@@ -9,6 +9,6 @@ add system led
 set system.@led[-1].name='vpn'
 set system.@led[-1].sysfs='green:wps'
 set system.@led[-1].trigger='netdev'
-set system.@led[-1].dev='tun0'
+set system.@led[-1].dev='vpn'
 set system.@led[-1].mode='link'
 EOI

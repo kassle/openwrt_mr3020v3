@@ -1,0 +1,16 @@
+TP-Link MR3020v3
+
+Inside the firmware
+- OpenWRT + LuCi
+- Support for USB Storage
+- Support for USB 4G Modem (tested with Huawei HiLink)
+- Ext4 Filesystem
+- Samba file sharing (ksmbd)
+- Wireguard
+- Scripting for device physical button
+    - switcher toggle to change mode: WISP, 3G, and AP
+    - Press button for start/stop VPN (wireguard) connection
+    - Long Press to reset pre-configured (WISP) Wi-Fi client
+
+Removed from OpenWRT base package
+- ppp/pppoe

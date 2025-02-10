@@ -6,7 +6,7 @@ fi
 
 uci -q batch << EOI
 set network.vpn='interface'
-set network.vpn.proto='none'
-set network.vpn.device='tun0'
+set network.vpn.proto='wireguard'
+set network.vpn.auto = '0'
 add_list firewall.@zone[1].network='vpn'
 EOI
