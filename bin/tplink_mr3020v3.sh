@@ -24,10 +24,10 @@ make image PROFILE="tplink_tl-mr3020-v3" PACKAGES="usb-modeswitch kmod-usb-net-c
 
 BIN1="bin/targets/ramips/mt76x8/openwrt-$OPENWRT_VERSION-ramips-mt76x8-tplink_tl-mr3020-v3-squashfs-sysupgrade.bin"
 if [ -f "$BIN1" ]; then
-    mv $BIN tplink-mr3020v3_$OPENWRT_VERSION_sysupgrade.bin
+    mv $BIN ../tplink-mr3020v3_$OPENWRT_VERSION_sysupgrade.bin
 fi
 
 BIN2="bin/targets/ramips/mt76x8/openwrt-$OPENWRT_VERSION-ramips-mt76x8-tplink_tl-mr3020-v3-squashfs-tftp-recovery.bin"
 if [ -f "$BIN2" ]; then
-    mv $BIN2 tplink-mr3020v3_$OPENWRT_VERSION_recovery.bin
+    mv $BIN2 ../tplink-mr3020v3_$OPENWRT_VERSION_recovery.bin
 fi
