@@ -3,13 +3,15 @@ if [ -z "$OPENWRT_VERSION" ]; then
     OPENWRT_VERSION="24.10.2"
 fi
 
-OPENWRT_BUILDER="https://downloads.openwrt.org/releases/$OPENWRT_VERSION/targets/ramips/mt76x8/openwrt-imagebuilder-$OPENWRT_VERSION-ramips-mt76x8.Linux-x86_64.tar.zst"
+OPENWRT_BASEURL="https://downloads.openwrt.org/releases/$OPENWRT_VERSION/targets/ramips/mt76x8"
+OPENWRT_BUILDER=`curl -sL $OPENWRT_BASEURL | grep "openwrt-imagebuilder-$OPENWRT_VERSION-ramips-mt76x8.Linux-x86_64" | awk -F\" '{ print $4 }'`
+OPENWRT_BUILDER="$OPENWRT_BASEURL/$OPENWRT_BUILDER"
 OPENWRT_WORKDIR="openwrt-imagebuilder-$OPENWRT_VERSION-ramips-mt76x8.Linux-x86_64"
 
 ## download builder
 BUILDER="builder.tar.zst"
 rm $BUILDER
-wget -O $BUILDER "$OPENWRT_BUILDER"
+curl -s "$OPENWRT_BUILDER" -o $BUILDER
 
 if [ ! -s "$BUILDER" ]; then
     echo "Failed to download $OPENWRT_BUILDER"

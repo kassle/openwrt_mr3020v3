@@ -1,1 +1,4 @@
 /openwrt-imagebuilder*
+builder.tar.zst
+*sysupgrade.bin
+*recovery.bin
