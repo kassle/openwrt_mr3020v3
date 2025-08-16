@@ -1,3 +1,22 @@
 ## Preparation
 ### Install required tools
 sudo apt install --no-install-recommends build-essential xz-utils wget python3-distutils
+
+## Run The Script
+### Set the openwrt version inside the script
+
+* edit bin/[device].sh
+* change the OPENWRT_VERSION value
+* ./bin/[device].sh
+
+### Set the openwrt version from system environment
+
+* export OPENWRT_VERSION=xx.xx.x
+* ./bin/[device.sh]
+* unset OPENWRT_VERSION
+
+## Output
+if build success, the binary files is located in working directory
+
+- [device]_[openwrt_version]_recovery.bin
+- [device]_[openwrt_version]_sysupgrade.bin
