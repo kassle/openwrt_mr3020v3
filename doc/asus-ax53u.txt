@@ -1,0 +1,15 @@
+ASUS RT-AX53U
+
+Inside the firmware
+- OpenWRT + LuCi
+- Support for USB Storage
+- Support for USB 4G Modem (tested with Huawei HiLink)
+- Ext4 Filesystem
+- Samba file sharing (ksmbd)
+- Wireguard
+- Scripting for device physical button
+    - WPS button to switch between WAN and 4G
+    - LED mapping if 4G switch enabled or disabled
+
+Removed from OpenWRT base package
+- ppp/pppoe

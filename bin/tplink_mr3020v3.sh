@@ -25,7 +25,7 @@ fi
 
 ## build image
 cd $OPENWRT_WORKDIR
-make image PROFILE="tplink_tl-mr3020-v3" PACKAGES="usb-modeswitch kmod-usb-net-cdc-ether kmod-usb-storage kmod-fs-ext4 blockd uhttpd uhttpd-mod-ubus libiwinfo-lua luci-base luci-app-firewall luci-mod-admin-full luci-theme-bootstrap luci-app-ksmbd luci-proto-wireguard -ppp -ppp-mod-pppoe" FILES="../files"
+make image PROFILE="tplink_tl-mr3020-v3" PACKAGES="usb-modeswitch kmod-usb-net-cdc-ether kmod-usb-storage kmod-fs-ext4 blockd uhttpd uhttpd-mod-ubus libiwinfo-lua luci-base luci-app-firewall luci-mod-admin-full luci-theme-bootstrap luci-app-ksmbd luci-proto-wireguard -ppp -ppp-mod-pppoe" FILES="../files/files_tplink-mr3020v3"
 
 BIN1="bin/targets/ramips/mt76x8/openwrt-${OPENWRT_VERSION}-ramips-mt76x8-tplink_tl-mr3020-v3-squashfs-sysupgrade.bin"
 if [ -f "$BIN1" ]; then

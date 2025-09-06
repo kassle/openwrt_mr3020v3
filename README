@@ -18,5 +18,5 @@ sudo apt install --no-install-recommends build-essential xz-utils wget python3-d
 ## Output
 if build success, the binary files is located in working directory
 
-- [device]_[openwrt_version]_recovery.bin
+- [device]_[openwrt_version]_recovery.bin or [device]_[openwrt_version]_factory.bin
 - [device]_[openwrt_version]_sysupgrade.bin
