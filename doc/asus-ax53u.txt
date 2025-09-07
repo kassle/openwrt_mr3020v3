@@ -9,7 +9,6 @@ Inside the firmware
 - Wireguard
 - Scripting for device physical button
     - WPS button to switch between WAN and 4G
-    - LED mapping if 4G switch enabled or disabled
 
 Removed from OpenWRT base package
 - ppp/pppoe

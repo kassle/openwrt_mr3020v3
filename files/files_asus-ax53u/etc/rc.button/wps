@@ -1,0 +1,18 @@
+#! /bin/sh
+
+# cycle internet connection between WAN and 4G (via USB Modem)
+if [ "$ACTION" = "released" ] && [ "$BUTTON" = "wps" ]; then
+    CURRENT_STATE=`uci get network.wan.device`
+
+    if [ ${CURRENT_STATE} == "wan" ]; then
+        logger "Switching internet connection to USB Modem"
+        uci set network.wan.device="eth1"
+        uci set network.wan6.device="eth1"
+    else
+        logger "Switching internet connection to WAN"
+        uci set network.wan.device="wan"
+        uci set network.wan6.device="wan"
+    fi
+
+    /etc/init.d/network reload
+fi
