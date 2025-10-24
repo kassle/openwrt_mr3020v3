@@ -1,6 +1,6 @@
 ## openwrt
 if [ -z "$OPENWRT_VERSION" ]; then
-    OPENWRT_VERSION="24.10.2"
+    OPENWRT_VERSION="24.10.4"
 fi
 
 OPENWRT_BASEURL="https://downloads.openwrt.org/releases/$OPENWRT_VERSION/targets/ramips/mt7621"
@@ -10,8 +10,8 @@ OPENWRT_WORKDIR="openwrt-imagebuilder-$OPENWRT_VERSION-ramips-mt7621.Linux-x86_6
 
 ## download builder
 BUILDER="builder.tar.zst"
-rm $BUILDER
-curl -s "$OPENWRT_BUILDER" -o $BUILDER
+# rm $BUILDER
+# curl -s "$OPENWRT_BUILDER" -o $BUILDER
 
 if [ ! -s "$BUILDER" ]; then
     echo "Failed to download $OPENWRT_BUILDER"
@@ -25,7 +25,7 @@ fi
 
 ## build image
 cd $OPENWRT_WORKDIR
-make image PROFILE="asus_rt-ax53u" PACKAGES="usb-modeswitch kmod-usb-net-cdc-ether kmod-usb-storage kmod-fs-ext4 blockd uhttpd uhttpd-mod-ubus libiwinfo-lua luci-base luci-app-firewall luci-mod-admin-full luci-theme-bootstrap luci-app-ksmbd luci-proto-wireguard luci-proto-ipv6 -ppp -ppp-mod-pppoe" FILES="../files/files_asus-ax53u"
+make image PROFILE="asus_rt-ax53u" PACKAGES="usb-modeswitch kmod-usb-net-cdc-ether kmod-usb-storage kmod-fs-ext4 blockd luci-nginx luci-ssl-nginx libiwinfo-lua luci-base luci-proto-wireguard luci-proto-ipv6 luci-mod-admin-full luci-theme-bootstrap luci-app-acme luci-app-firewall luci-app-ksmbd luci-app-wol -ppp -ppp-mod-pppoe" FILES="../files/files_asus-ax53u"
 
 BIN1="bin/targets/ramips/mt7621/openwrt-${OPENWRT_VERSION}-ramips-mt7621-asus_rt-ax53u-squashfs-sysupgrade.bin"
 if [ -f "$BIN1" ]; then
