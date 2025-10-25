@@ -10,8 +10,8 @@ OPENWRT_WORKDIR="openwrt-imagebuilder-$OPENWRT_VERSION-ramips-mt7621.Linux-x86_6
 
 ## download builder
 BUILDER="builder.tar.zst"
-# rm $BUILDER
-# curl -s "$OPENWRT_BUILDER" -o $BUILDER
+rm $BUILDER
+curl -s "$OPENWRT_BUILDER" -o $BUILDER
 
 if [ ! -s "$BUILDER" ]; then
     echo "Failed to download $OPENWRT_BUILDER"
