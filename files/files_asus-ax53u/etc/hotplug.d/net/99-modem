@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ eth1 = "$INTERFACE" ]; then
+    if [ add = "$ACTION" ]; then
+        logger -t usbnet "New net device added: [$INTERFACE]"
+        logger -t usbnet "Switching gateway to $INTERFACE"
+        uci set network.wan.device="$INTERFACE"
+        uci set network.wan6.device="$INTERFACE"
+        /etc/init.d/network reload
+    elif [ remove = "$ACTION" ]; then
+        logger -t usbnet "Net device removed: [$INTERFACE]"
+        logger -t usbnet "Switching gateway to wan"
+        uci set network.wan.device="wan"
+        uci set network.wan6.device="wan"
+        /etc/init.d/network reload
+    fi
+fi
