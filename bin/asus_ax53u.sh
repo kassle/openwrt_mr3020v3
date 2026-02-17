@@ -25,7 +25,7 @@ fi
 
 ## build image
 cd $OPENWRT_WORKDIR
-make image PROFILE="asus_rt-ax53u" PACKAGES="usb-modeswitch kmod-usb-net-cdc-ether kmod-usb-storage kmod-fs-ext4 blockd luci-nginx luci-ssl-nginx libiwinfo-lua luci-base luci-proto-wireguard luci-proto-ipv6 luci-mod-admin-full luci-theme-bootstrap luci-app-acme luci-app-firewall luci-app-ksmbd luci-app-wol -ppp -ppp-mod-pppoe" FILES="../files/files_asus-ax53u"
+make image PROFILE="asus_rt-ax53u" PACKAGES="usb-modeswitch kmod-usb-net-cdc-ether  uhttpd uhttpd-mod-ubus libiwinfo-lua luci-base luci-proto-wireguard luci-proto-ipv6 luci-mod-admin-full luci-theme-bootstrap luci-app-firewall luci-app-wol -ppp -ppp-mod-pppoe" FILES="../files/files_asus-ax53u"
 
 BIN1="bin/targets/ramips/mt7621/openwrt-${OPENWRT_VERSION}-ramips-mt7621-asus_rt-ax53u-squashfs-sysupgrade.bin"
 if [ -f "$BIN1" ]; then
